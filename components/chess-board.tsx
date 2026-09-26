@@ -288,7 +288,11 @@ export function ChessBoard({ fen, highlightedSquares = [], onSelectSquare }: { f
             const square = `${files[colIndex]}${8 - rowIndex}` as Square;
             const isDark = (rowIndex + colIndex) % 2 === 1;
             const isSelected = highlightedSquares.includes(square);
-            const glyph = cell ? pieceGlyphs[`${cell.color === 'w' ? 'w' : 'b'}${cell.type}`] : '';
+            const pieceKey = cell ? `${cell.color === 'w' ? 'w' : 'b'}${cell.type}` : '';
+            const glyph = cell ? pieceGlyphs[pieceKey] : '';
+            const pieceColorClass = cell?.color === 'w'
+              ? 'text-white drop-shadow-[0_0_1px_rgba(15,23,42,0.9),0_0_2px_rgba(15,23,42,0.9)]'
+              : 'text-slate-900 drop-shadow-[0_0_1px_rgba(255,255,255,0.8),0_0_2px_rgba(255,255,255,0.8)]';
 
             return (
               <button
@@ -301,7 +305,9 @@ export function ChessBoard({ fen, highlightedSquares = [], onSelectSquare }: { f
                   isSelected ? 'ring-2 ring-brand-400 ring-inset' : ''
                 ].join(' ')}
               >
-                <span className="select-none">{glyph}</span>
+                {cell ? (
+                  <span className={`select-none ${pieceColorClass}`}>{glyph}</span>
+                ) : null}
                 {rowIndex === 7 && (
                   <span className="absolute bottom-1 right-1 text-[10px] font-medium opacity-60">{files[colIndex]}</span>
                 )}
